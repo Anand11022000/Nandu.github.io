@@ -1,0 +1,1278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Anand Papagalla — Health Informatics Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+/* ── RESET & VARIABLES ─────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --navy:       #0D2B45;
+  --navy-mid:   #1A4A72;
+  --navy-light: #2E6DA4;
+  --sky:        #D6EAF8;
+  --sky-mid:    #AED6F1;
+  --teal:       #0E8C72;
+  --teal-light: #D0F0E8;
+  --amber:      #B8860B;
+  --amber-light:#FEF5D7;
+  --coral:      #C0392B;
+  --coral-light:#FADBD8;
+  --cream:      #F8F6F1;
+  --white:      #FFFFFF;
+  --ink:        #0D2B45;
+  --ink-mid:    #2C4A63;
+  --ink-soft:   #5E7B96;
+  --ink-muted:  #8AABBD;
+  --border:     rgba(13,43,69,0.12);
+  --border-mid: rgba(13,43,69,0.22);
+}
+html { scroll-behavior: smooth; }
+body { font-family: 'Source Sans 3', sans-serif; background: var(--cream); color: var(--ink); line-height: 1.7; overflow-x: hidden; }
+
+/* ── SPLASH ─────────────────────────────────────────────────── */
+#splash {
+  position: fixed; inset: 0; z-index: 9999;
+  background: var(--navy);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  text-align: center;
+  transition: opacity 0.7s ease, visibility 0.7s ease;
+}
+#splash.fade-out { opacity: 0; visibility: hidden; }
+.splash-tag { font-size:11px; font-weight:600; letter-spacing:0.22em; text-transform:uppercase; color:var(--sky-mid); margin-bottom:1.5rem; opacity:0; transform:translateY(12px); animation:rise 0.6s 0.3s ease forwards; }
+.splash-name { font-family:'Playfair Display',serif; font-size:clamp(2.8rem,7vw,5.5rem); color:var(--white); line-height:1.05; letter-spacing:-1px; opacity:0; transform:translateY(20px); animation:rise 0.8s 0.7s ease forwards; }
+.splash-name span { color:var(--sky-mid); font-style:italic; }
+.splash-degree { font-size:15px; font-weight:300; color:var(--sky-mid); margin-top:1rem; opacity:0; transform:translateY(12px); animation:rise 0.6s 1.2s ease forwards; }
+.splash-bar { width:0; height:2px; background:var(--teal); margin-top:2.5rem; animation:expand 2.2s 1.6s ease forwards; }
+@keyframes rise { to { opacity:1; transform:translateY(0); } }
+@keyframes expand { to { width:200px; } }
+
+/* ── NAV ────────────────────────────────────────────────────── */
+nav {
+  position: sticky; top: 0; z-index: 100;
+  background: var(--navy);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 3rem; height: 60px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.25);
+}
+.nav-brand { font-family:'Playfair Display',serif; font-size:17px; color:var(--white); letter-spacing:-0.2px; text-decoration:none; }
+.nav-brand span { color:var(--sky-mid); font-style:italic; }
+.nav-primary { display:flex; align-items:center; gap:0.25rem; list-style:none; }
+.nav-primary > li { position:relative; }
+.nav-primary > li > a,
+.nav-more-btn {
+  display:flex; align-items:center; gap:4px;
+  text-decoration:none;
+  font-size:12px; font-weight:600; letter-spacing:0.1em; text-transform:uppercase;
+  color:rgba(174,214,241,0.7);
+  padding:0.45rem 0.85rem;
+  border-radius:3px;
+  transition:background 0.18s, color 0.18s;
+  background:none; border:none; cursor:pointer; font-family:inherit;
+}
+.nav-primary > li > a:hover,
+.nav-more-btn:hover { color:var(--white); background:rgba(255,255,255,0.08); }
+.nav-primary > li > a.active { color:var(--white); background:rgba(255,255,255,0.1); }
+
+/* Highlight CTA link */
+.nav-primary > li > a.nav-cta {
+  background: var(--teal);
+  color: var(--white);
+  border-radius: 3px;
+  padding: 0.4rem 1rem;
+  letter-spacing: 0.07em;
+}
+.nav-primary > li > a.nav-cta:hover { background: #0a6b57; }
+
+/* More dropdown */
+.nav-more-btn .caret { font-size:9px; transition:transform 0.2s; }
+.nav-more-btn[aria-expanded="true"] .caret { transform:rotate(180deg); }
+.nav-dropdown {
+  display:none;
+  position:absolute; top:calc(100% + 6px); right:0;
+  background:var(--navy-mid);
+  border:1px solid rgba(255,255,255,0.12);
+  border-radius:4px;
+  box-shadow:0 8px 24px rgba(0,0,0,0.35);
+  min-width:200px;
+  overflow:hidden;
+  z-index:200;
+}
+.nav-dropdown.open { display:block; }
+.nav-dropdown a {
+  display:block; padding:0.65rem 1.1rem;
+  font-size:12px; font-weight:500; letter-spacing:0.06em;
+  text-transform:uppercase; text-decoration:none;
+  color:rgba(174,214,241,0.8);
+  transition:background 0.15s, color 0.15s;
+  border-bottom:1px solid rgba(255,255,255,0.06);
+}
+.nav-dropdown a:last-child { border-bottom:none; }
+.nav-dropdown a:hover { background:rgba(255,255,255,0.1); color:var(--white); }
+
+/* ── HERO ───────────────────────────────────────────────────── */
+.hero { background:var(--navy); display:grid; grid-template-columns:1.1fr 0.9fr; min-height:88vh; }
+.hero-left { padding:6rem 3rem 5rem 4rem; display:flex; flex-direction:column; justify-content:center; border-right:1px solid rgba(255,255,255,0.08); }
+.hero-eyebrow { font-size:11px; font-weight:600; letter-spacing:0.18em; text-transform:uppercase; color:var(--teal); margin-bottom:1.5rem; display:flex; align-items:center; gap:0.75rem; }
+.hero-eyebrow::before { content:''; width:28px; height:1px; background:var(--teal); display:block; }
+.hero-title { font-family:'Playfair Display',serif; font-size:clamp(2.8rem,4.5vw,4.5rem); color:var(--white); line-height:1.08; letter-spacing:-1.5px; margin-bottom:1.75rem; }
+.hero-title em { font-style:italic; color:var(--sky-mid); }
+.hero-bio { font-size:16px; font-weight:300; color:var(--sky-mid); max-width:500px; line-height:1.85; margin-bottom:2.5rem; }
+.hero-contacts { display:flex; flex-wrap:wrap; gap:0.75rem; margin-bottom:2.5rem; }
+.contact-pill { display:inline-flex; align-items:center; gap:0.4rem; background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.12); border-radius:2px; padding:0.4rem 0.9rem; font-size:12px; color:var(--sky-mid); text-decoration:none; transition:background 0.2s,color 0.2s; }
+.contact-pill:hover { background:rgba(255,255,255,0.13); color:var(--white); }
+.hero-cta-row { display:flex; gap:1rem; }
+.cta-primary { background:var(--teal); color:var(--white); text-decoration:none; padding:0.75rem 1.75rem; font-size:14px; font-weight:600; letter-spacing:0.04em; border-radius:2px; transition:background 0.2s; }
+.cta-primary:hover { background:#0a6b57; }
+.cta-secondary { background:transparent; color:var(--sky-mid); text-decoration:none; padding:0.75rem 1.75rem; font-size:14px; font-weight:600; letter-spacing:0.04em; border:1px solid rgba(255,255,255,0.2); border-radius:2px; transition:all 0.2s; }
+.cta-secondary:hover { border-color:var(--sky-mid); color:var(--white); }
+.hero-right { padding:5rem 3rem; display:flex; flex-direction:column; justify-content:center; gap:1.5rem; }
+.stat-card { background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.08); border-radius:2px; padding:1.5rem 1.75rem; }
+.stat-num { font-family:'Playfair Display',serif; font-size:2.8rem; color:var(--sky-mid); line-height:1; letter-spacing:-1px; margin-bottom:0.3rem; }
+.stat-label { font-size:13px; font-weight:300; color:rgba(174,214,241,0.6); line-height:1.5; }
+
+/* ── GENERIC SECTION ─────────────────────────────────────────── */
+section { border-bottom:1px solid var(--border); }
+.section-inner { max-width:1100px; margin:0 auto; padding:5rem 3rem; }
+.section-header { display:grid; grid-template-columns:160px 1fr; gap:2.5rem; align-items:end; margin-bottom:4rem; }
+.section-num { font-family:'Playfair Display',serif; font-size:5rem; color:var(--border-mid); line-height:1; letter-spacing:-3px; }
+.section-label { font-size:11px; font-weight:600; letter-spacing:0.16em; text-transform:uppercase; color:var(--teal); margin-bottom:0.6rem; }
+.section-title { font-family:'Playfair Display',serif; font-size:2.4rem; line-height:1.1; letter-spacing:-0.6px; color:var(--ink); }
+
+/* ── ABOUT ───────────────────────────────────────────────────── */
+.about-grid { display:grid; grid-template-columns:1fr 1fr; gap:4rem; }
+.about-text { font-size:16px; color:var(--ink-mid); line-height:1.85; }
+.about-text p+p { margin-top:1.2rem; }
+.about-text strong { color:var(--navy); font-weight:600; }
+.interest-chips { display:flex; flex-wrap:wrap; gap:0.6rem; margin-top:1.5rem; }
+.chip { font-size:12px; font-weight:600; letter-spacing:0.04em; padding:0.35rem 0.85rem; border-radius:2px; }
+.chip-teal  { background:var(--teal-light); color:var(--teal); }
+.chip-navy  { background:var(--sky); color:var(--navy-mid); }
+.chip-amber { background:var(--amber-light); color:var(--amber); }
+.skills-table { width:100%; border-collapse:collapse; }
+.skills-table tr { border-bottom:1px solid var(--border); }
+.skills-table tr:last-child { border-bottom:none; }
+.skills-table td { padding:0.75rem 0.5rem; font-size:14px; vertical-align:middle; }
+.skills-table td:first-child { color:var(--ink); font-weight:500; width:60%; }
+.skills-table td:last-child { text-align:right; }
+.badge { font-size:10px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; padding:0.2rem 0.55rem; border-radius:2px; }
+.badge-core   { background:var(--teal-light); color:var(--teal); }
+.badge-active { background:var(--sky); color:var(--navy-mid); }
+.badge-learn  { background:var(--amber-light); color:var(--amber); }
+
+/* ── EDUCATION ───────────────────────────────────────────────── */
+.edu-list { display:flex; flex-direction:column; gap:1.5rem; }
+.edu-item { display:grid; grid-template-columns:140px 1fr; gap:1.5rem; padding:1.75rem; background:var(--white); border:1px solid var(--border); border-left:4px solid var(--navy-light); border-radius:2px; }
+.edu-year { font-size:13px; color:var(--ink-soft); font-weight:500; padding-top:3px; }
+.edu-degree { font-family:'Playfair Display',serif; font-size:18px; color:var(--ink); margin-bottom:0.2rem; }
+.edu-school { font-size:14px; color:var(--ink-soft); }
+.edu-grade { display:inline-block; margin-top:0.5rem; font-size:12px; font-weight:600; background:var(--sky); color:var(--navy-mid); padding:0.2rem 0.6rem; border-radius:2px; }
+
+/* ── CAPSTONE STORY ─────────────────────────────────────────── */
+.journey-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--border); border:1px solid var(--border); margin-bottom:3rem; }
+.journey-step { background:var(--white); padding:2rem 1.5rem; }
+.journey-step.active { background:var(--navy); }
+.j-num  { font-family:'Playfair Display',serif; font-size:2.8rem; color:var(--border); line-height:1; margin-bottom:0.5rem; }
+.j-tag  { font-size:10px; font-weight:700; letter-spacing:0.16em; text-transform:uppercase; color:var(--teal); margin-bottom:0.75rem; }
+.j-text { font-size:14px; color:var(--ink-mid); line-height:1.7; }
+.journey-step.active .j-num  { color:rgba(255,255,255,0.12); }
+.journey-step.active .j-tag  { color:var(--sky-mid); }
+.journey-step.active .j-text { color:rgba(174,214,241,0.8); }
+
+.insight-row { display:grid; grid-template-columns:repeat(3,1fr); gap:1.5rem; margin-bottom:2.5rem; }
+.insight-card { background:var(--white); border:1px solid var(--border); padding:1.75rem; border-radius:2px; }
+.i-icon { width:34px; height:34px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:14px; margin-bottom:1.1rem; }
+.i-teal   { background:var(--teal-light); color:var(--teal); }
+.i-amber  { background:var(--amber-light); color:var(--amber); }
+.i-coral  { background:var(--coral-light); color:var(--coral); }
+.insight-card h4 { font-size:15px; font-weight:600; margin-bottom:0.5rem; color:var(--ink); }
+.insight-card p  { font-size:14px; color:var(--ink-mid); line-height:1.7; }
+
+.rec-box { background:var(--navy); padding:2.5rem 3rem; border-radius:2px; }
+.rec-box .r-label { font-size:10px; font-weight:700; letter-spacing:0.18em; text-transform:uppercase; color:var(--sky-mid); opacity:0.6; margin-bottom:0.8rem; }
+.rec-box .r-text  { font-family:'Playfair Display',serif; font-size:1.35rem; color:var(--white); line-height:1.55; letter-spacing:-0.2px; }
+
+/* ── VIZ SECTION ─────────────────────────────────────────────── */
+.viz-section-intro { font-size:15px; color:var(--ink-mid); line-height:1.8; margin-bottom:3rem; max-width:760px; }
+.viz-grid-2col { display:grid; grid-template-columns:1fr 1fr; gap:2rem; margin-bottom:2rem; }
+.viz-grid-1col { display:grid; grid-template-columns:1fr; gap:2rem; margin-bottom:2rem; }
+.viz-card { background:var(--white); border:1px solid var(--border); border-radius:2px; overflow:hidden; }
+.viz-card.wide { grid-column:1/-1; }
+.viz-header { padding:1rem 1.5rem; border-bottom:1px solid var(--border); background:var(--navy); display:flex; align-items:center; justify-content:space-between; }
+.viz-title { font-size:13px; font-weight:600; color:var(--white); }
+.viz-badge { font-size:10px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; padding:0.2rem 0.6rem; background:rgba(14,140,114,0.35); color:var(--teal-light); border-radius:2px; }
+.viz-body { padding:1.5rem; }
+.viz-note { font-size:11px; color:var(--ink-muted); margin-top:1rem; line-height:1.6; }
+
+/* horizontal bar */
+.hbar-chart { display:flex; flex-direction:column; gap:10px; }
+.hbar-row { display:flex; align-items:center; gap:8px; }
+.hbar-label { font-size:12px; color:var(--ink-soft); flex-shrink:0; text-align:right; }
+.hbar-label-wide { width:175px; }
+.hbar-label-med  { width:130px; }
+.hbar-track { flex:1; background:#E8EDEE; border-radius:1px; height:22px; overflow:hidden; }
+.hbar-fill {
+  height:100%; border-radius:1px;
+  display:flex; align-items:center; justify-content:flex-end; padding-right:7px;
+  font-size:11px; font-weight:600; color:var(--white);
+  width: 0;
+  transition: width 1.1s cubic-bezier(.25,.8,.25,1);
+}
+.hbar-navy  { background:var(--navy-mid); }
+.hbar-teal  { background:var(--teal); }
+.hbar-amber { background:var(--amber); }
+.hbar-coral { background:var(--coral); }
+.hbar-sky   { background:var(--sky-mid); }
+
+/* grouped bars — branch Medicaid */
+.group-chart { display:flex; flex-direction:column; gap:14px; }
+.group-label { font-size:11px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:var(--ink-soft); margin-bottom:4px; }
+.group-row { display:flex; align-items:center; gap:8px; }
+.group-name { font-size:12px; color:var(--ink-mid); width:100px; flex-shrink:0; }
+.group-track { flex:1; background:#E8EDEE; border-radius:1px; height:18px; overflow:hidden; }
+.group-fill { height:100%; border-radius:1px; display:flex; align-items:center; padding-left:6px; font-size:10px; font-weight:700; color:var(--white); width:0; transition:width 1.1s cubic-bezier(.25,.8,.25,1); }
+
+/* scatter plot proxy — OR chart */
+.or-chart { display:flex; flex-direction:column; gap:16px; }
+.or-row { display:flex; align-items:center; gap:12px; }
+.or-feature { font-size:12px; color:var(--ink-mid); width:180px; flex-shrink:0; line-height:1.4; }
+.or-axis { flex:1; position:relative; height:28px; }
+.or-baseline { position:absolute; left:30%; top:0; bottom:0; width:2px; background:var(--border-mid); }
+.or-dot-wrap { position:absolute; top:50%; transform:translateY(-50%); }
+.or-dot { width:14px; height:14px; border-radius:50%; border:2px solid var(--white); box-shadow:0 0 0 2px currentColor; }
+.or-dot.risk       { background:var(--coral); color:var(--coral); }
+.or-dot.protective { background:var(--teal);  color:var(--teal); }
+.or-val { font-size:11px; font-weight:700; margin-top:2px; text-align:center; }
+
+/* time series svg chart */
+.ts-chart-wrap { width:100%; overflow:hidden; }
+.ts-legend { display:flex; gap:1.5rem; margin-bottom:0.75rem; }
+.ts-leg-item { display:flex; align-items:center; gap:6px; font-size:12px; color:var(--ink-soft); }
+.ts-leg-dot  { width:12px; height:3px; border-radius:2px; }
+
+/* donut */
+.donut-wrap { display:flex; align-items:center; gap:1.5rem; flex-wrap:wrap; }
+.donut-legend { display:flex; flex-direction:column; gap:8px; }
+.leg-item { display:flex; align-items:center; gap:8px; font-size:13px; color:var(--ink-mid); }
+.leg-dot  { width:10px; height:10px; border-radius:50%; flex-shrink:0; }
+
+/* model metrics table */
+.metrics-table { width:100%; border-collapse:collapse; font-size:13px; }
+.metrics-table th { background:var(--navy); color:var(--white); padding:0.7rem 1rem; text-align:left; font-size:11px; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; }
+.metrics-table td { padding:0.65rem 1rem; border-bottom:1px solid var(--border); color:var(--ink-mid); }
+.metrics-table tr:last-child td { border-bottom:none; }
+.metrics-table tr:nth-child(even) td { background:#f5f9fc; }
+.metrics-table .val { font-weight:700; color:var(--navy); }
+.metrics-table .good { color:var(--teal); font-weight:700; }
+.metrics-table .warn { color:var(--amber); font-weight:700; }
+
+/* rec table */
+.rec-table { width:100%; border-collapse:collapse; font-size:13px; margin-top:2rem; }
+.rec-table th { background:var(--navy); color:var(--white); padding:0.75rem 1rem; text-align:left; font-size:11px; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; }
+.rec-table td { padding:0.75rem 1rem; border-bottom:1px solid var(--border); color:var(--ink-mid); vertical-align:top; line-height:1.6; }
+.rec-table tr:last-child td { border-bottom:none; }
+.rec-table tr:nth-child(even) td { background:#f5f9fc; }
+.p-badge { display:inline-block; width:22px; height:22px; border-radius:50%; font-size:11px; font-weight:700; text-align:center; line-height:22px; color:var(--white); }
+.p1 { background:var(--coral); }
+.p2 { background:var(--amber); }
+.p3 { background:var(--teal); }
+
+/* cluster profile table */
+.cluster-table { width:100%; border-collapse:collapse; font-size:12px; }
+.cluster-table th { background:var(--navy); color:var(--white); padding:0.6rem 0.75rem; text-align:center; font-size:10px; font-weight:600; letter-spacing:0.07em; text-transform:uppercase; }
+.cluster-table td { padding:0.6rem 0.75rem; border-bottom:1px solid var(--border); text-align:center; color:var(--ink-mid); }
+.cluster-table tr:last-child td { border-bottom:none; }
+.cluster-table td:first-child { text-align:left; font-weight:600; color:var(--ink); }
+.cl-uninsured { border-left:4px solid var(--coral); }
+.cl-lowdig    { border-left:4px solid var(--amber); }
+.cl-engaged   { border-left:4px solid var(--teal); }
+.cl-medicaid  { border-left:4px solid var(--navy-light); }
+
+/* feature importance */
+.fi-chart { display:flex; flex-direction:column; gap:10px; }
+.fi-row { display:flex; align-items:center; gap:8px; }
+.fi-label { font-size:12px; color:var(--ink-soft); width:160px; flex-shrink:0; text-align:right; }
+.fi-track { flex:1; background:#E8EDEE; border-radius:1px; height:20px; overflow:hidden; }
+.fi-fill  { height:100%; border-radius:1px; display:flex; align-items:center; justify-content:flex-end; padding-right:6px; font-size:10px; font-weight:700; color:var(--white); width:0; transition:width 1.1s cubic-bezier(.25,.8,.25,1); }
+
+/* ── ARTIFACTS ───────────────────────────────────────────────── */
+.artifacts-grid { display:grid; grid-template-columns:1fr 1fr; gap:2rem; }
+.artifact-card { background:var(--white); border:1px solid var(--border); overflow:hidden; border-radius:2px; }
+.art-header { padding:1rem 1.5rem; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; background:var(--cream); }
+.art-title { font-size:13px; font-weight:600; color:var(--ink); }
+.art-badge { font-size:10px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; padding:0.2rem 0.6rem; background:var(--sky); color:var(--navy-mid); border-radius:2px; }
+.art-body { padding:1.5rem; }
+.bar-chart { display:flex; flex-direction:column; gap:10px; }
+.bar-row { display:flex; align-items:center; gap:8px; }
+.b-label { font-size:12px; color:var(--ink-soft); width:130px; text-align:right; flex-shrink:0; }
+.b-track { flex:1; background:#E8EDEE; border-radius:1px; height:22px; overflow:hidden; }
+.b-fill { height:100%; border-radius:1px; display:flex; align-items:center; justify-content:flex-end; padding-right:7px; font-size:11px; font-weight:600; color:var(--white); transition:width 1.1s cubic-bezier(.25,.8,.25,1); }
+.b-navy { background:var(--navy-mid); } .b-teal { background:var(--teal); } .b-amber { background:var(--amber); } .b-soft { background:#8AABBD; } .b-muted { background:#BFCFD8; }
+.code-block { background:#EFF4F7; border-radius:2px; padding:1.25rem; font-family:'Courier New',monospace; font-size:12px; line-height:1.75; color:var(--ink-mid); overflow-x:auto; }
+.ck { color:var(--navy); font-weight:700; } .cs { color:var(--coral); } .cc { color:var(--ink-muted); } .ct { color:var(--teal); font-weight:600; }
+
+/* ── ETHICS ──────────────────────────────────────────────────── */
+.ethics-grid { display:grid; grid-template-columns:1fr 1fr; gap:2rem; margin-bottom:2rem; }
+.ethics-card { background:var(--white); border:1px solid var(--border); border-top:4px solid var(--navy-light); padding:2rem; border-radius:2px; }
+.ethics-card.warn-card { border-top-color:var(--amber); }
+.ethics-card h4 { font-size:15px; font-weight:700; color:var(--ink); margin-bottom:0.35rem; }
+.ethics-card .e-sub { font-size:11px; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:var(--teal); margin-bottom:0.75rem; }
+.ethics-card p { font-size:14px; color:var(--ink-mid); line-height:1.75; }
+.ethics-lim { background:var(--cream); border:1px solid var(--border); padding:2rem; border-radius:2px; }
+.ethics-lim h4 { font-size:15px; font-weight:700; color:var(--ink); margin-bottom:1rem; }
+.lim-list { display:flex; flex-direction:column; gap:0.75rem; }
+.lim-item { display:flex; gap:1rem; align-items:flex-start; }
+.lim-tag { font-size:10px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; background:var(--amber-light); color:var(--amber); padding:0.25rem 0.55rem; border-radius:2px; flex-shrink:0; margin-top:2px; }
+.lim-text { font-size:14px; color:var(--ink-mid); line-height:1.7; }
+
+/* ── EXPERIENCE ─────────────────────────────────────────────── */
+.exp-cert-grid { display:grid; grid-template-columns:1fr 1fr; gap:3rem; }
+.timeline { display:flex; flex-direction:column; gap:1.5rem; }
+.tl-item { display:flex; gap:1.25rem; }
+.tl-dot-col { display:flex; flex-direction:column; align-items:center; padding-top:4px; }
+.tl-dot { width:10px; height:10px; border-radius:50%; background:var(--navy-light); flex-shrink:0; }
+.tl-line { flex:1; width:1px; background:var(--border); margin-top:4px; }
+.tl-title { font-size:15px; font-weight:600; color:var(--ink); margin-bottom:0.2rem; }
+.tl-sub   { font-size:13px; color:var(--ink-soft); margin-bottom:0.5rem; }
+.tl-desc  { font-size:14px; color:var(--ink-mid); line-height:1.7; }
+.cert-list { display:flex; flex-direction:column; gap:1rem; }
+.cert-item { background:var(--white); border:1px solid var(--border); border-left:4px solid var(--teal); padding:1.1rem 1.25rem; border-radius:2px; }
+.cert-title { font-size:14px; font-weight:600; color:var(--ink); margin-bottom:0.2rem; }
+.cert-meta  { font-size:12px; color:var(--ink-soft); }
+
+/* ── FOOTER ─────────────────────────────────────────────────── */
+footer { background:var(--navy); padding:2.5rem 3rem; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem; }
+.footer-name { font-family:'Playfair Display',serif; font-size:18px; color:var(--white); }
+.footer-name span { color:var(--sky-mid); font-style:italic; }
+.footer-links { display:flex; gap:1.5rem; }
+.footer-links a { font-size:12px; color:var(--sky-mid); text-decoration:none; font-weight:500; transition:color 0.2s; }
+.footer-links a:hover { color:var(--white); }
+
+/* ── SCROLL REVEAL ─────────────────────────────────────────── */
+.reveal { opacity:0; transform:translateY(24px); transition:opacity 0.7s ease,transform 0.7s ease; }
+.reveal.visible { opacity:1; transform:translateY(0); }
+</style>
+</head>
+<body>
+
+<!-- SPLASH -->
+<div id="splash">
+  <div class="splash-tag">Health Informatics &nbsp;·&nbsp; Franklin University</div>
+  <div class="splash-name">Anand<br><span>Papagalla</span></div>
+  <div class="splash-degree">M.S. Health Informatics &nbsp;·&nbsp; Columbus, Ohio</div>
+  <div class="splash-bar"></div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-brand" href="#">Anand <span>Papagalla</span></a>
+  <ul class="nav-primary">
+    <li><a href="#about">About</a></li>
+    <li><a href="#capstone">Capstone</a></li>
+    <li><a href="#visualizations">Visuals</a></li>
+    <li>
+      <button class="nav-more-btn" id="nav-more-btn" aria-expanded="false" aria-controls="nav-dropdown">
+        More <span class="caret">▾</span>
+      </button>
+      <div class="nav-dropdown" id="nav-dropdown" role="menu">
+        <a href="#education">Education</a>
+        <a href="#methodology">Methodology</a>
+        <a href="#recommendations">Recommendations</a>
+        <a href="#artifacts">Code &amp; Downloads</a>
+        <a href="#experience">Experience</a>
+      </div>
+    </li>
+    <li><a href="mailto:anand.nandu0211@gmail.com" class="nav-cta">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- TOOLS USED BANNER -->
+<div style="background:var(--navy-mid);border-bottom:1px solid rgba(255,255,255,0.1);padding:0.65rem 3rem;display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap;">
+  <span style="font-size:10px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:var(--sky-mid);flex-shrink:0;">Tools Used</span>
+  <div style="display:flex;gap:0.55rem;flex-wrap:wrap;">
+    <span style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.14);border-radius:2px;padding:0.2rem 0.7rem;font-size:11px;font-weight:600;color:var(--white);">Python 3.11</span>
+    <span style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.14);border-radius:2px;padding:0.2rem 0.7rem;font-size:11px;font-weight:600;color:var(--white);">pandas</span>
+    <span style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.14);border-radius:2px;padding:0.2rem 0.7rem;font-size:11px;font-weight:600;color:var(--white);">scikit-learn</span>
+    <span style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.14);border-radius:2px;padding:0.2rem 0.7rem;font-size:11px;font-weight:600;color:var(--white);">NumPy</span>
+    <span style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.14);border-radius:2px;padding:0.2rem 0.7rem;font-size:11px;font-weight:600;color:var(--white);">Matplotlib</span>
+    <span style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.14);border-radius:2px;padding:0.2rem 0.7rem;font-size:11px;font-weight:600;color:var(--white);">Jupyter Notebook</span>
+    <span style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.14);border-radius:2px;padding:0.2rem 0.7rem;font-size:11px;font-weight:600;color:var(--white);">K-Means</span>
+    <span style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.14);border-radius:2px;padding:0.2rem 0.7rem;font-size:11px;font-weight:600;color:var(--white);">Logistic Regression</span>
+    <span style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.14);border-radius:2px;padding:0.2rem 0.7rem;font-size:11px;font-weight:600;color:var(--white);">Random Forest</span>
+    <span style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.14);border-radius:2px;padding:0.2rem 0.7rem;font-size:11px;font-weight:600;color:var(--white);">Time Series (polyfit)</span>
+    <span style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.14);border-radius:2px;padding:0.2rem 0.7rem;font-size:11px;font-weight:600;color:var(--white);">Excel / CSV</span>
+  </div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-left">
+    <div class="hero-eyebrow">Health Informatics Portfolio</div>
+    <h1 class="hero-title">Analytics for<br>smarter, more<br><em>equitable</em> care</h1>
+    <p class="hero-bio">M.S. Health Informatics student at Franklin University applying machine learning and clinical research expertise to help healthcare organizations better understand and serve their patients.</p>
+    <div class="hero-contacts">
+      <a class="contact-pill" href="mailto:anand.nandu0211@gmail.com">&#9993; anand.nandu0211@gmail.com</a>
+      <a class="contact-pill" href="tel:+13802849397">&#9990; +1 380-284-9397</a>
+      <a class="contact-pill" href="https://www.linkedin.com/in/anand-nandu-8057b7307" target="_blank">&#8599; LinkedIn</a>
+      <a class="contact-pill" href="https://anand11022000.github.io" target="_blank">&#8599; GitHub</a>
+      <span class="contact-pill">&#9679; Columbus, OH 43235</span>
+    </div>
+    <div class="hero-cta-row">
+      <a class="cta-primary" href="#capstone">View Capstone Story →</a>
+      <a class="cta-secondary" href="#visualizations">See data visualizations</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="stat-card">
+      <div class="stat-num">4,546</div>
+      <div class="stat-label">Patient records analyzed — real-world HW Dental capstone project</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">3</div>
+      <div class="stat-label">Predictive models developed — K-Means, Logistic Regression, Random Forest</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">79.7%</div>
+      <div class="stat-label">Classification accuracy predicting uninsured patient status</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">B. Pharm</div>
+      <div class="stat-label">Clinical pharmacy foundation — bridging clinical knowledge with informatics</div>
+    </div>
+  </div>
+</div>
+
+<!-- ── ABOUT ── -->
+<section id="about">
+  <div class="section-inner">
+    <div class="section-header reveal">
+      <div class="section-num">01</div>
+      <div>
+        <div class="section-label">Professional introduction</div>
+        <h2 class="section-title">About me</h2>
+      </div>
+    </div>
+    <div class="about-grid reveal">
+      <div class="about-text">
+        <p style="font-size:17px;font-weight:500;color:var(--navy);line-height:1.65;margin-bottom:1.4rem;border-left:3px solid var(--teal);padding-left:1rem;">Most analysts know the data. I know what the data means for the patient standing at the front desk.</p>
+        <p>I'm a Health Informatics M.S. student at Franklin University with a B. Pharmacy background — giving me a clinical lens most data analysts don't have. My capstone applied K-Means, Logistic Regression, and Random Forest to real HW Dental patient data, surfacing structural inequities in insurance access across four Columbus branches.</p>
+        <p>Goal: Clinical Informatics or Health Data Analyst — connecting clinical training with analytics to improve health equity outcomes.</p>
+        <div class="interest-chips">
+          <span class="chip chip-teal">Clinical Informatics</span>
+          <span class="chip chip-teal">Health Data Analytics</span>
+          <span class="chip chip-navy">Pharmacovigilance</span>
+          <span class="chip chip-navy">Clinical Research</span>
+          <span class="chip chip-amber">Health Equity</span>
+          <span class="chip chip-amber">Regulatory Affairs</span>
+        </div>
+      </div>
+      <div>
+        <table class="skills-table">
+          <tr><td>Python (pandas, NumPy, scikit-learn, matplotlib)</td><td><span class="badge badge-core">Core</span></td></tr>
+          <tr><td>SQL — querying, JOINs, aggregation, schema design</td><td><span class="badge badge-core">Core</span></td></tr>
+          <tr><td>Machine Learning (K-Means, Logistic Reg., RF)</td><td><span class="badge badge-core">Core</span></td></tr>
+          <tr><td>Excel / SALT statistical tool</td><td><span class="badge badge-core">Core</span></td></tr>
+          <tr><td>Clinical Data Management (Rave, Macro, Oracle)</td><td><span class="badge badge-core">Core</span></td></tr>
+          <tr><td>Pharmacovigilance (ICSR, MedDRA, WHO COSTAT)</td><td><span class="badge badge-core">Core</span></td></tr>
+          <tr><td>Tableau / Power BI</td><td><span class="badge badge-active">In progress</span></td></tr>
+          <tr><td>Information governance &amp; clinical workflows</td><td><span class="badge badge-active">In progress</span></td></tr>
+          <tr><td>R (ggplot2, dplyr)</td><td><span class="badge badge-learn">Learning</span></td></tr>
+          <tr><td>Regulatory Affairs (CTD modules, NDA, BLA)</td><td><span class="badge badge-core">Core</span></td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── EDUCATION ── -->
+<section id="education">
+  <div class="section-inner">
+    <div class="section-header reveal">
+      <div class="section-num">02</div>
+      <div>
+        <div class="section-label">Academic background</div>
+        <h2 class="section-title">Education</h2>
+      </div>
+    </div>
+    <div class="edu-list reveal">
+      <div class="edu-item">
+        <div class="edu-year">2024 – Present</div>
+        <div>
+          <div class="edu-degree">M.S. Health Informatics</div>
+          <div class="edu-school">Franklin University &nbsp;·&nbsp; Columbus, Ohio</div>
+          <span class="edu-grade">Pursuing</span>
+        </div>
+      </div>
+      <div class="edu-item">
+        <div class="edu-year">2019 – 2023</div>
+        <div>
+          <div class="edu-degree">B. Pharmacy</div>
+          <div class="edu-school">Teegala Krishna Reddy College of Pharmacy</div>
+          <span class="edu-grade">6.50 CGPA &nbsp;·&nbsp; 65%</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── CAPSTONE ── -->
+<section id="capstone">
+  <div class="section-inner">
+    <div class="section-header reveal">
+      <div class="section-num">03</div>
+      <div>
+        <div class="section-label">Graduate Capstone · Franklin University · BUSA-695</div>
+        <h2 class="section-title">Patient Analytics — HW Dental Group</h2>
+      </div>
+    </div>
+
+    <div class="reveal" style="max-width:760px;margin-bottom:2.5rem;">
+      <p style="font-size:15px;color:var(--ink-mid);line-height:1.8;">Applied unsupervised and supervised machine learning to de-identified patient data (n=4,546) across four Columbus-area dental branches to identify structural disparities in insurance access, Medicaid concentration, and digital engagement.</p>
+    </div>
+
+    <!-- Compact 3-col results -->
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;margin-bottom:2.5rem;" class="reveal">
+      <div style="background:var(--white);border:1px solid var(--border);border-top:3px solid var(--teal);padding:1.4rem 1.5rem;border-radius:2px;">
+        <div style="font-size:10px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--teal);margin-bottom:0.6rem;">Segmentation</div>
+        <div style="font-size:13px;color:var(--ink-mid);line-height:1.7;"><strong>K-Means (k=4)</strong> — identified four patient archetypes with distinct insurance, Medicaid, and digital profiles. Silhouette score: 0.32.</div>
+      </div>
+      <div style="background:var(--white);border:1px solid var(--border);border-top:3px solid var(--amber);padding:1.4rem 1.5rem;border-radius:2px;">
+        <div style="font-size:10px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--amber);margin-bottom:0.6rem;">Classification</div>
+        <div style="font-size:13px;color:var(--ink-mid);line-height:1.7;"><strong>Logistic Regression + Random Forest</strong> — predicted uninsured status with 79.7% accuracy (AUC 0.698). Branch location was the strongest predictor (OR=1.693).</div>
+      </div>
+      <div style="background:var(--white);border:1px solid var(--border);border-top:3px solid var(--coral);padding:1.4rem 1.5rem;border-radius:2px;">
+        <div style="font-size:10px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--coral);margin-bottom:0.6rem;">Trend Analysis</div>
+        <div style="font-size:13px;color:var(--ink-mid);line-height:1.7;"><strong>Time Series (13 months)</strong> — Medicaid share increased from ~30% to ~47% while volume grew +8.2/month, indicating declining revenue per patient.</div>
+      </div>
+    </div>
+
+    <!-- One-line finding -->
+    <div class="rec-box reveal">
+      <div class="r-label">Key finding</div>
+      <p class="r-text">Branch location is the primary driver of insurance disparity. A single network-wide strategy is insufficient — each branch requires a differentiated intervention plan.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── METHODOLOGY ── -->
+<section id="methodology">
+  <div class="section-inner">
+    <div class="section-header reveal">
+      <div class="section-num">04</div>
+      <div>
+        <div class="section-label">Analytical approach</div>
+        <h2 class="section-title">Methodology</h2>
+      </div>
+    </div>
+    <div class="about-grid reveal">
+      <div class="about-text">
+        <p>De-identified data from 4,546 patients across four branches was cleaned, feature-engineered, and analyzed using three complementary methods: K-Means clustering (k=4) for unsupervised patient segmentation, Logistic Regression and Random Forest for binary classification of uninsured status (5-fold CV, class-balanced), and NumPy polyfit for 13-month payer-mix trend detection.</p>
+      </div>
+      <div>
+        <table class="skills-table">
+          <tr><td>Data cleaning &amp; EDA</td><td><span class="badge badge-core">pandas · Excel</span></td></tr>
+          <tr><td>Feature engineering</td><td><span class="badge badge-core">Python / regex</span></td></tr>
+          <tr><td>Unsupervised clustering</td><td><span class="badge badge-core">K-Means (k=4)</span></td></tr>
+          <tr><td>Supervised classification</td><td><span class="badge badge-core">LR · Random Forest</span></td></tr>
+          <tr><td>Cross-validation</td><td><span class="badge badge-core">5-fold CV</span></td></tr>
+          <tr><td>Trend modeling</td><td><span class="badge badge-core">NumPy polyfit</span></td></tr>
+          <tr><td>Visualization</td><td><span class="badge badge-active">Matplotlib · Seaborn</span></td></tr>
+          <tr><td>Validation sample</td><td><span class="badge badge-active">20% hold-out</span></td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── DATA VISUALIZATIONS ── -->
+<section id="visualizations">
+  <div class="section-inner">
+    <div class="section-header reveal">
+      <div class="section-num">05</div>
+      <div>
+        <div class="section-label">Technical artifacts &amp; visual analytics</div>
+        <h2 class="section-title">Data visualizations from the project</h2>
+      </div>
+    </div>
+    <p class="viz-section-intro reveal">Core analytical outputs from the HW Dental capstone — cluster profiles, logistic regression odds ratios, Random Forest feature importance, branch-level payer mix, and the 13-month time series trend.</p>
+
+    <!-- Row 1: Cluster bars + Cluster profile table -->
+    <div class="viz-grid-2col reveal" id="viz-row1">
+
+      <div class="viz-card">
+        <div class="viz-header">
+          <span class="viz-title">K-Means Patient Cluster Distribution (k=4)</span>
+          <span class="viz-badge">Python / scikit-learn</span>
+        </div>
+        <div class="viz-body">
+          <p style="font-size:13px;color:var(--ink-soft);margin-bottom:1rem;">n=4,546 patients · z-score normalized · Silhouette = 0.32</p>
+          <div class="hbar-chart">
+            <div class="hbar-row">
+              <div class="hbar-label hbar-label-med">Insured &amp; Engaged</div>
+              <div class="hbar-track"><div class="hbar-fill hbar-teal" data-w="39.5%">39.5% (n=1,795)</div></div>
+            </div>
+            <div class="hbar-row">
+              <div class="hbar-label hbar-label-med">Young Medicaid Families</div>
+              <div class="hbar-track"><div class="hbar-fill hbar-navy" data-w="23.8%">23.8% (n=1,084)</div></div>
+            </div>
+            <div class="hbar-row">
+              <div class="hbar-label hbar-label-med">Uninsured Segment</div>
+              <div class="hbar-track"><div class="hbar-fill hbar-coral" data-w="20.5%">20.5% (n=934)</div></div>
+            </div>
+            <div class="hbar-row">
+              <div class="hbar-label hbar-label-med">Low-Digital Medicaid</div>
+              <div class="hbar-track"><div class="hbar-fill hbar-amber" data-w="16.1%">16.1% (n=733)</div></div>
+            </div>
+          </div>
+          <p class="viz-note">Features used: Age, Family Size, Has Insurance, Medicaid Flag, Has Email, Has Referral, Spanish. Optimal k selected via elbow method + silhouette score.</p>
+        </div>
+      </div>
+
+      <div class="viz-card">
+        <div class="viz-header">
+          <span class="viz-title">Cluster Profile Table</span>
+          <span class="viz-badge">K-Means Output</span>
+        </div>
+        <div class="viz-body">
+          <table class="cluster-table">
+            <thead>
+              <tr>
+                <th>Cluster</th><th>n</th><th>Avg Age</th><th>Fam.</th><th>Insured</th><th>Medicaid</th><th>Email</th><th>Referral</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="cl-uninsured"><td>Uninsured Segment</td><td>934</td><td>34.2</td><td>1.5</td><td>0%</td><td>0%</td><td>59.3%</td><td>61.0%</td></tr>
+              <tr class="cl-lowdig"><td>Low-Digital Medicaid</td><td>733</td><td>33.7</td><td>1.8</td><td>76%</td><td>24%</td><td>39.4%</td><td>0%</td></tr>
+              <tr class="cl-engaged"><td>Insured &amp; Engaged</td><td>1,795</td><td>34.4</td><td>1.9</td><td>100%</td><td>0%</td><td>80.1%</td><td>100%</td></tr>
+              <tr class="cl-medicaid"><td>Young Medicaid Fam.</td><td>1,084</td><td>29.7</td><td>2.2</td><td>100%</td><td>100%</td><td>83.5%</td><td>87.8%</td></tr>
+            </tbody>
+          </table>
+          <p class="viz-note">Color coding: <span style="color:var(--coral);font-weight:600;">■</span> Uninsured &nbsp; <span style="color:var(--amber);font-weight:600;">■</span> Low-Digital &nbsp; <span style="color:var(--teal);font-weight:600;">■</span> Engaged &nbsp; <span style="color:var(--navy-light);font-weight:600;">■</span> Medicaid Families</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Row 2: LR Odds Ratio chart + RF Feature Importance -->
+    <div class="viz-grid-2col reveal" id="viz-row2">
+
+      <div class="viz-card">
+        <div class="viz-header">
+          <span class="viz-title">Logistic Regression — Odds Ratios (Uninsured Status)</span>
+          <span class="viz-badge">Python / scikit-learn</span>
+        </div>
+        <div class="viz-body">
+          <p style="font-size:13px;color:var(--ink-soft);margin-bottom:1.2rem;">OR &gt;1 = increased risk &nbsp;·&nbsp; OR &lt;1 = protective &nbsp;·&nbsp; Reference: Clintonville branch</p>
+          <div class="or-chart">
+            <!-- OR=1.693 Westerville: position at 55% from left (OR 1.0 = 30%) -->
+            <div class="or-row">
+              <div class="or-feature">Westerville Branch<br><span style="font-size:11px;color:var(--ink-muted);">vs. Clintonville (ref.)</span></div>
+              <div class="or-axis">
+                <div class="or-baseline"></div>
+                <div class="or-dot-wrap" style="left:55%">
+                  <div class="or-dot risk"></div>
+                  <div class="or-val" style="color:var(--coral);font-size:11px;">OR=1.693</div>
+                </div>
+              </div>
+            </div>
+            <div class="or-row">
+              <div class="or-feature">Age (per year)</div>
+              <div class="or-axis">
+                <div class="or-baseline"></div>
+                <div class="or-dot-wrap" style="left:36%">
+                  <div class="or-dot risk"></div>
+                  <div class="or-val" style="color:var(--coral);font-size:11px;">OR=1.174</div>
+                </div>
+              </div>
+            </div>
+            <div class="or-row">
+              <div class="or-feature">Has Referral<br><span style="font-size:11px;color:var(--ink-muted);">protective factor</span></div>
+              <div class="or-axis">
+                <div class="or-baseline"></div>
+                <div class="or-dot-wrap" style="left:22%">
+                  <div class="or-dot protective"></div>
+                  <div class="or-val" style="color:var(--teal);font-size:11px;">OR=0.732</div>
+                </div>
+              </div>
+            </div>
+            <div class="or-row">
+              <div class="or-feature">Family Size (per member)<br><span style="font-size:11px;color:var(--ink-muted);">protective factor</span></div>
+              <div class="or-axis">
+                <div class="or-baseline"></div>
+                <div class="or-dot-wrap" style="left:15%">
+                  <div class="or-dot protective"></div>
+                  <div class="or-val" style="color:var(--teal);font-size:11px;">OR=0.657</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div style="margin-top:1.25rem;padding-top:1rem;border-top:1px solid var(--border);">
+            <table class="metrics-table">
+              <thead><tr><th>Metric</th><th>Value</th><th>Interpretation</th></tr></thead>
+              <tbody>
+                <tr><td>Accuracy</td><td class="val good">79.7%</td><td>4 in 5 patients correctly classified</td></tr>
+                <tr><td>AUC (test set)</td><td class="val">0.698</td><td>40% better than random</td></tr>
+                <tr><td>AUC (5-fold CV)</td><td class="val">0.692 ± 0.018</td><td>Stable — not overfitting</td></tr>
+                <tr><td>Precision (uninsured)</td><td class="val warn">54%</td><td>Moderate positive predictive value</td></tr>
+                <tr><td>Recall (uninsured)</td><td class="val warn">8%</td><td>Class imbalance limits minority capture</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="viz-card">
+        <div class="viz-header">
+          <span class="viz-title">Random Forest — Feature Importance</span>
+          <span class="viz-badge">Python / scikit-learn</span>
+        </div>
+        <div class="viz-body">
+          <p style="font-size:13px;color:var(--ink-soft);margin-bottom:1rem;">Gini importance scores for predicting uninsured status</p>
+          <div class="fi-chart">
+            <div class="fi-row">
+              <div class="fi-label">Age</div>
+              <div class="fi-track"><div class="fi-fill hbar-navy" data-w="89%">0.269</div></div>
+            </div>
+            <div class="fi-row">
+              <div class="fi-label">Family Size</div>
+              <div class="fi-track"><div class="fi-fill hbar-teal" data-w="77%">0.233</div></div>
+            </div>
+            <div class="fi-row">
+              <div class="fi-label">Has Referral</div>
+              <div class="fi-track"><div class="fi-fill hbar-amber" data-w="39%">0.119</div></div>
+            </div>
+            <div class="fi-row">
+              <div class="fi-label">Westerville Branch</div>
+              <div class="fi-track"><div class="fi-fill hbar-coral" data-w="36%">0.109</div></div>
+            </div>
+            <div class="fi-row">
+              <div class="fi-label">Has Email</div>
+              <div class="fi-track"><div class="fi-fill hbar-sky" data-w="25%">0.076</div></div>
+            </div>
+            <div class="fi-row">
+              <div class="fi-label">Medicaid Flag</div>
+              <div class="fi-track"><div class="fi-fill" style="background:var(--ink-muted);" data-w="18%">0.055</div></div>
+            </div>
+          </div>
+          <p class="viz-note">Random Forest confirms Logistic Regression rankings: Age and Family Size are the strongest predictors. Westerville branch (importance=0.109) is a significant model feature even after controlling for patient-level demographics — confirming a branch-specific access barrier.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Row 3: Time series + Branch payer mix -->
+    <div class="viz-grid-2col reveal" id="viz-row3">
+
+      <div class="viz-card">
+        <div class="viz-header">
+          <span class="viz-title">Time Series — Patient Volume &amp; Medicaid Rate Trend</span>
+          <span class="viz-badge">Python / NumPy polyfit</span>
+        </div>
+        <div class="viz-body">
+          <div class="ts-legend">
+            <div class="ts-leg-item"><div class="ts-leg-dot" style="background:var(--navy-mid);"></div>Monthly new patients</div>
+            <div class="ts-leg-item"><div class="ts-leg-dot" style="background:var(--coral);"></div>Medicaid rate (%)</div>
+            <div class="ts-leg-item"><div class="ts-leg-dot" style="background:var(--teal);border:1px dashed var(--teal);"></div>Trend lines (OLS)</div>
+          </div>
+          <div class="ts-chart-wrap">
+            <svg viewBox="0 0 520 230" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+              <!-- Axes -->
+              <line x1="50" y1="10" x2="50" y2="195" stroke="#CBD5E0" stroke-width="1.5"/>
+              <line x1="50" y1="195" x2="510" y2="195" stroke="#CBD5E0" stroke-width="1.5"/>
+              <!-- Y left labels (patients 0-100) -->
+              <text x="44" y="198" text-anchor="end" font-size="9" fill="#8AABBD">0</text>
+              <text x="44" y="150" text-anchor="end" font-size="9" fill="#8AABBD">25</text>
+              <text x="44" y="102" text-anchor="end" font-size="9" fill="#8AABBD">50</text>
+              <text x="44" y="54"  text-anchor="end" font-size="9" fill="#8AABBD">75</text>
+              <text x="44" y="14"  text-anchor="end" font-size="9" fill="#8AABBD">100</text>
+              <!-- Y right labels (medicaid % 0-60%) -->
+              <text x="514" y="198" font-size="9" fill="#C0392B">0%</text>
+              <text x="514" y="134" font-size="9" fill="#C0392B">20%</text>
+              <text x="514" y="70"  font-size="9" fill="#C0392B">40%</text>
+              <text x="514" y="14"  font-size="9" fill="#C0392B">60%</text>
+              <!-- Grid lines -->
+              <line x1="50" y1="150" x2="510" y2="150" stroke="#E2E8F0" stroke-width="1" stroke-dasharray="4,3"/>
+              <line x1="50" y1="102" x2="510" y2="102" stroke="#E2E8F0" stroke-width="1" stroke-dasharray="4,3"/>
+              <line x1="50" y1="54"  x2="510" y2="54"  stroke="#E2E8F0" stroke-width="1" stroke-dasharray="4,3"/>
+              <!-- Month labels: Jun-25 to Jun-26 (13 months), x from 70 to 490, step ~35 -->
+              <text x="68"  y="208" font-size="8" fill="#8AABBD" text-anchor="middle">Jun</text>
+              <text x="103" y="208" font-size="8" fill="#8AABBD" text-anchor="middle">Jul</text>
+              <text x="138" y="208" font-size="8" fill="#8AABBD" text-anchor="middle">Aug</text>
+              <text x="173" y="208" font-size="8" fill="#8AABBD" text-anchor="middle">Sep</text>
+              <text x="208" y="208" font-size="8" fill="#8AABBD" text-anchor="middle">Oct</text>
+              <text x="243" y="208" font-size="8" fill="#8AABBD" text-anchor="middle">Nov</text>
+              <text x="278" y="208" font-size="8" fill="#8AABBD" text-anchor="middle">Dec</text>
+              <text x="313" y="208" font-size="8" fill="#8AABBD" text-anchor="middle">Jan</text>
+              <text x="348" y="208" font-size="8" fill="#8AABBD" text-anchor="middle">Feb</text>
+              <text x="383" y="208" font-size="8" fill="#8AABBD" text-anchor="middle">Mar</text>
+              <text x="418" y="208" font-size="8" fill="#8AABBD" text-anchor="middle">Apr</text>
+              <text x="453" y="208" font-size="8" fill="#8AABBD" text-anchor="middle">May</text>
+              <text x="488" y="208" font-size="8" fill="#8AABBD" text-anchor="middle">Jun</text>
+              <text x="278" y="220" font-size="8" fill="#8AABBD" text-anchor="middle">2025 → 2026</text>
+              <!-- PATIENT VOLUME bars (scale: max ~95 → height ~185 at y=10) -->
+              <!-- heights: roughly (val/100)*185, y = 195-h -->
+              <rect x="58"  y="155" width="18" height="40"  fill="var(--navy-mid)" opacity="0.7" rx="1"/><!-- 22 -->
+              <rect x="93"  y="148" width="18" height="47"  fill="var(--navy-mid)" opacity="0.7" rx="1"/><!-- 25 -->
+              <rect x="128" y="142" width="18" height="53"  fill="var(--navy-mid)" opacity="0.7" rx="1"/><!-- 29 -->
+              <rect x="163" y="135" width="18" height="60"  fill="var(--navy-mid)" opacity="0.7" rx="1"/><!-- 32 -->
+              <rect x="198" y="132" width="18" height="63"  fill="var(--navy-mid)" opacity="0.7" rx="1"/><!-- 34 -->
+              <rect x="233" y="127" width="18" height="68"  fill="var(--navy-mid)" opacity="0.7" rx="1"/><!-- 37 -->
+              <rect x="268" y="122" width="18" height="73"  fill="var(--navy-mid)" opacity="0.7" rx="1"/><!-- 39 -->
+              <rect x="303" y="116" width="18" height="79"  fill="var(--navy-mid)" opacity="0.7" rx="1"/><!-- 43 -->
+              <rect x="338" y="111" width="18" height="84"  fill="var(--navy-mid)" opacity="0.7" rx="1"/><!-- 45 -->
+              <rect x="373" y="106" width="18" height="89"  fill="var(--navy-mid)" opacity="0.7" rx="1"/><!-- 48 -->
+              <rect x="408" y="101" width="18" height="94"  fill="var(--navy-mid)" opacity="0.7" rx="1"/><!-- 51 -->
+              <rect x="443" y="96"  width="18" height="99"  fill="var(--navy-mid)" opacity="0.7" rx="1"/><!-- 54 -->
+              <rect x="478" y="91"  width="18" height="104" fill="var(--navy-mid)" opacity="0.7" rx="1"/><!-- 56 -->
+              <!-- Volume trend line (polyfit) -->
+              <line x1="68" y1="153" x2="488" y2="93" stroke="var(--navy-light)" stroke-width="1.5" stroke-dasharray="5,3" opacity="0.9"/>
+              <!-- MEDICAID RATE line (scale: 0-60% → 0-185px) -->
+              <!-- Points: roughly 30→31→32→32→33→34→35→37→38→41→43→45→47 % -->
+              <!-- y = 195 - (val/60)*185 -->
+              <polyline
+                points="68,102 103,99 138,96 173,96 208,93 243,89 278,86 313,81 348,77 383,68 418,62 453,56 488,50"
+                fill="none" stroke="var(--coral)" stroke-width="2.5"/>
+              <!-- Medicaid trend line -->
+              <line x1="68" y1="104" x2="488" y2="48" stroke="var(--teal)" stroke-width="1.5" stroke-dasharray="5,3" opacity="0.7"/>
+              <!-- Annotations -->
+              <text x="68"  y="96"  font-size="8" fill="var(--coral)" text-anchor="middle">30%</text>
+              <text x="488" y="44"  font-size="8" fill="var(--coral)" text-anchor="middle">47%</text>
+              <text x="300" y="32"  font-size="9" fill="var(--coral)" font-weight="bold">+17 pp in 13 months</text>
+              <text x="488" y="86"  font-size="8" fill="var(--navy-mid)">+8.2/mo</text>
+            </svg>
+          </div>
+          <p class="viz-note">Note: Westerville excluded from time series (100% missing DateFirstVisit). Trend based on 3 branches. Medicaid rate rising from ~30% to ~47% over 13 months represents a structural payer-mix shift requiring operational response.</p>
+        </div>
+      </div>
+
+      <div class="viz-card">
+        <div class="viz-header">
+          <span class="viz-title">Payer Mix &amp; Uninsured Rate by Branch</span>
+          <span class="viz-badge">Exploratory Data Analysis</span>
+        </div>
+        <div class="viz-body">
+          <p style="font-size:12px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:0.75rem;">Medicaid concentration by branch</p>
+          <div class="group-chart" id="branch-chart">
+            <div>
+              <div class="group-row">
+                <div class="group-name">Sawmill</div>
+                <div class="group-track"><div class="group-fill" style="background:var(--coral);" data-w="43.7%">43.7% Medicaid</div></div>
+              </div>
+            </div>
+            <div>
+              <div class="group-row">
+                <div class="group-name">Westerville</div>
+                <div class="group-track"><div class="group-fill" style="background:var(--amber);" data-w="34%">~34%</div></div>
+              </div>
+            </div>
+            <div>
+              <div class="group-row">
+                <div class="group-name">Clintonville</div>
+                <div class="group-track"><div class="group-fill" style="background:var(--navy-mid);" data-w="26%">~26%</div></div>
+              </div>
+            </div>
+            <div>
+              <div class="group-row">
+                <div class="group-name">Polaris</div>
+                <div class="group-track"><div class="group-fill" style="background:var(--teal);" data-w="14%">~14%</div></div>
+              </div>
+            </div>
+          </div>
+
+          <p style="font-size:12px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-soft);margin:1.5rem 0 0.75rem;">Uninsured rate by branch</p>
+          <div class="group-chart" id="uninsured-chart">
+            <div class="group-row">
+              <div class="group-name">Westerville</div>
+              <div class="group-track"><div class="group-fill" style="background:var(--coral);" data-w="28.5%">28.5%</div></div>
+            </div>
+            <div class="group-row">
+              <div class="group-name">Sawmill</div>
+              <div class="group-track"><div class="group-fill" style="background:var(--amber);" data-w="22%">~22%</div></div>
+            </div>
+            <div class="group-row">
+              <div class="group-name">Clintonville</div>
+              <div class="group-track"><div class="group-fill" style="background:var(--navy-mid);" data-w="17%">~17%</div></div>
+            </div>
+            <div class="group-row">
+              <div class="group-name">Polaris</div>
+              <div class="group-track"><div class="group-fill" style="background:var(--teal);" data-w="12.1%">12.1%</div></div>
+            </div>
+          </div>
+
+          <p style="font-size:12px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-soft);margin:1.5rem 0 0.75rem;">Email capture rate by branch</p>
+          <div class="group-chart" id="email-chart">
+            <div class="group-row">
+              <div class="group-name">Polaris</div>
+              <div class="group-track"><div class="group-fill" style="background:var(--teal);" data-w="73.3%">73.3%</div></div>
+            </div>
+            <div class="group-row">
+              <div class="group-name">Westerville</div>
+              <div class="group-track"><div class="group-fill" style="background:var(--navy-mid);" data-w="65%">~65%</div></div>
+            </div>
+            <div class="group-row">
+              <div class="group-name">Sawmill</div>
+              <div class="group-track"><div class="group-fill" style="background:var(--amber);" data-w="61%">~61%</div></div>
+            </div>
+            <div class="group-row">
+              <div class="group-name">Clintonville</div>
+              <div class="group-track"><div class="group-fill" style="background:var(--coral);" data-w="55.8%">55.8%</div></div>
+            </div>
+          </div>
+          <p class="viz-note">Polaris (73.3% email, 79% referral attribution) is the digital benchmark. Westerville's 540 uninsured patients (57.8% of all uninsured) combined with its access-barrier OR=1.693 make it the highest-priority intervention site.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Row 4: original referral & donut -->
+    <div class="viz-grid-2col reveal" id="viz-row4">
+      <div class="viz-card">
+        <div class="viz-header">
+          <span class="viz-title">Referral source distribution — all branches</span>
+          <span class="viz-badge">Python / matplotlib</span>
+        </div>
+        <div class="viz-body">
+          <p style="font-size:13px;color:var(--ink-soft);margin-bottom:1.2rem;">Share of recorded referrals after string normalization (n=3,318 patients with HasReferral=1)</p>
+          <div class="bar-chart" id="bc1">
+            <div class="bar-row"><span class="b-label">Google / digital</span><div class="b-track"><div class="b-fill b-navy" style="width:0" data-w="54%">54%</div></div></div>
+            <div class="bar-row"><span class="b-label">Personal referral</span><div class="b-track"><div class="b-fill b-teal" style="width:0" data-w="18%">18%</div></div></div>
+            <div class="bar-row"><span class="b-label">Insurance site</span><div class="b-track"><div class="b-fill b-amber" style="width:0" data-w="12%">12%</div></div></div>
+            <div class="bar-row"><span class="b-label">Friend / family</span><div class="b-track"><div class="b-fill b-soft" style="width:0" data-w="9%">9%</div></div></div>
+            <div class="bar-row"><span class="b-label">Other</span><div class="b-track"><div class="b-fill b-muted" style="width:0" data-w="7%">7%</div></div></div>
+          </div>
+          <p class="viz-note">27% of patients had no referral recorded (excluded). Google dominates overall but is unevenly distributed — Medicaid and Spanish-likelihood patient groups show lower digital referral rates.</p>
+        </div>
+      </div>
+
+      <div class="viz-card">
+        <div class="viz-header">
+          <span class="viz-title">Channel split: Spanish likelihood High vs. Low</span>
+          <span class="viz-badge">Python / seaborn</span>
+        </div>
+        <div class="viz-body">
+          <p style="font-size:13px;color:var(--ink-soft);margin-bottom:1.2rem;">Referral channel mix differs markedly between patient segments</p>
+          <div class="donut-wrap">
+            <div>
+              <p style="font-size:12px;font-weight:600;color:var(--ink-mid);margin-bottom:6px;text-align:center;">High Spanish likelihood</p>
+              <svg width="130" height="130" viewBox="0 0 130 130">
+                <circle cx="65" cy="65" r="46" fill="none" stroke="#E8EDEE" stroke-width="20"/>
+                <circle cx="65" cy="65" r="46" fill="none" stroke="#1A4A72" stroke-width="20" stroke-dasharray="122 167" stroke-dashoffset="0" transform="rotate(-90 65 65)"/>
+                <circle cx="65" cy="65" r="46" fill="none" stroke="#0E8C72" stroke-width="20" stroke-dasharray="57 232" stroke-dashoffset="-122" transform="rotate(-90 65 65)"/>
+                <circle cx="65" cy="65" r="46" fill="none" stroke="#B8860B" stroke-width="20" stroke-dasharray="110 179" stroke-dashoffset="-179" transform="rotate(-90 65 65)"/>
+                <text x="65" y="68" text-anchor="middle" font-size="10" fill="#2C4A63" font-family="Source Sans 3,sans-serif" font-weight="600">n≈800</text>
+              </svg>
+            </div>
+            <div>
+              <p style="font-size:12px;font-weight:600;color:var(--ink-mid);margin-bottom:6px;text-align:center;">Low Spanish likelihood</p>
+              <svg width="130" height="130" viewBox="0 0 130 130">
+                <circle cx="65" cy="65" r="46" fill="none" stroke="#E8EDEE" stroke-width="20"/>
+                <circle cx="65" cy="65" r="46" fill="none" stroke="#1A4A72" stroke-width="20" stroke-dasharray="167 122" stroke-dashoffset="0" transform="rotate(-90 65 65)"/>
+                <circle cx="65" cy="65" r="46" fill="none" stroke="#0E8C72" stroke-width="20" stroke-dasharray="69 220" stroke-dashoffset="-167" transform="rotate(-90 65 65)"/>
+                <circle cx="65" cy="65" r="46" fill="none" stroke="#B8860B" stroke-width="20" stroke-dasharray="53 236" stroke-dashoffset="-236" transform="rotate(-90 65 65)"/>
+                <text x="65" y="68" text-anchor="middle" font-size="10" fill="#2C4A63" font-family="Source Sans 3,sans-serif" font-weight="600">n≈2,500</text>
+              </svg>
+            </div>
+            <div class="donut-legend">
+              <div class="leg-item"><div class="leg-dot" style="background:#1A4A72"></div>Google / digital</div>
+              <div class="leg-item"><div class="leg-dot" style="background:#0E8C72"></div>Insurance site</div>
+              <div class="leg-item"><div class="leg-dot" style="background:#B8860B"></div>Personal / word-of-mouth</div>
+            </div>
+          </div>
+          <p class="viz-note">Hispanic-origin patients have the lowest insurance rate (62.5% vs. 79.5% network average). High-Spanish-likelihood patients rely more on word-of-mouth than digital, revealing an untapped Spanish-language digital outreach opportunity at Westerville and Sawmill.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── RECOMMENDATIONS ── -->
+<section id="recommendations">
+  <div class="section-inner">
+    <div class="section-header reveal">
+      <div class="section-num">06</div>
+      <div>
+        <div class="section-label">Evidence-based action plan</div>
+        <h2 class="section-title">Strategic recommendations</h2>
+      </div>
+    </div>
+    <p style="font-size:15px;color:var(--ink-mid);line-height:1.8;margin-bottom:2rem;max-width:760px;" class="reveal">Six model-grounded interventions — each backed by specific model evidence, a measurable KPI, and a realistic timeline. Interventions prioritized by revenue impact and data readiness.</p>
+    <div class="reveal" style="overflow-x:auto;">
+      <table class="rec-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Recommendation</th>
+            <th>Model Evidence</th>
+            <th>KPI Target</th>
+            <th>Timeline</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="p-badge p1">1</span></td>
+            <td><strong>Bilingual insurance navigation at Westerville</strong> — target Cluster 0 (540 uninsured patients)</td>
+            <td>LR OR=1.693; RF importance=0.109; est. revenue $115K–$193K/yr</td>
+            <td>Uninsured: 28.5% → ≤20%</td>
+            <td>12 months</td>
+          </tr>
+          <tr>
+            <td><span class="p-badge p1">2</span></td>
+            <td><strong>CHIP family outreach at Sawmill</strong> — target Cluster 3 (Young Medicaid Families, n=1,084)</td>
+            <td>Medicaid rate 43.7%; avg family size 2.2; rising Medicaid trend in time series</td>
+            <td>CHIP conversion ≥15% of eligible families</td>
+            <td>6 months</td>
+          </tr>
+          <tr>
+            <td><span class="p-badge p2">3</span></td>
+            <td><strong>Standardize Polaris intake protocols network-wide</strong> — fix Cluster 1 digital gap (39.4% email)</td>
+            <td>Polaris: 73.3% email, 79% attribution — network benchmark; Clintonville: 55.8%</td>
+            <td>Email capture ≥70% all branches</td>
+            <td>3 months</td>
+          </tr>
+          <tr>
+            <td><span class="p-badge p2">4</span></td>
+            <td><strong>Formalize referral incentive programme</strong> network-wide</td>
+            <td>Has Referral OR=0.732 protective effect; RF importance=0.119</td>
+            <td>Westerville referral attribution: 78.8% → 85%</td>
+            <td>9 months</td>
+          </tr>
+          <tr>
+            <td><span class="p-badge p3">5</span></td>
+            <td><strong>Fix DateFirstVisit capture at Westerville</strong> — currently 100% missing</td>
+            <td>Prevents all time-series analysis and recall scheduling at Westerville</td>
+            <td>DateFirstVisit capture ≥95%</td>
+            <td>1 month</td>
+          </tr>
+          <tr>
+            <td><span class="p-badge p3">6</span></td>
+            <td><strong>Obtain multi-year Ohio Medicaid / HRSA data</strong> to validate time-series trend</td>
+            <td>Single-year data limits structural trend confirmation; models need retraining</td>
+            <td>Time series validated with ≥3 years data</td>
+            <td>6 months</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ── CODE ARTIFACTS ── -->
+<section id="artifacts">
+  <div class="section-inner">
+    <div class="section-header reveal">
+      <div class="section-num">07</div>
+      <div>
+        <div class="section-label">Technical proficiency</div>
+        <h2 class="section-title">Tools &amp; technical skills</h2>
+      </div>
+    </div>
+
+    <!-- Compact skill groups -->
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;margin-bottom:2rem;" class="reveal">
+      <div style="background:var(--white);border:1px solid var(--border);padding:1.4rem 1.5rem;border-radius:2px;">
+        <div style="font-size:10px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--teal);margin-bottom:0.75rem;">Analytics &amp; ML</div>
+        <div style="font-size:13px;color:var(--ink-mid);line-height:1.9;">Python · pandas · NumPy · scikit-learn<br>K-Means · Logistic Regression · Random Forest<br>Matplotlib · Seaborn · Jupyter</div>
+      </div>
+      <div style="background:var(--white);border:1px solid var(--border);padding:1.4rem 1.5rem;border-radius:2px;">
+        <div style="font-size:10px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--amber);margin-bottom:0.75rem;">Data &amp; Clinical Systems</div>
+        <div style="font-size:13px;color:var(--ink-mid);line-height:1.9;">SQL · Excel · SALT<br>Rave · Macro · Oracle (CDM)<br>ICSR · MedDRA · WHO COSTAT</div>
+      </div>
+      <div style="background:var(--white);border:1px solid var(--border);padding:1.4rem 1.5rem;border-radius:2px;">
+        <div style="font-size:10px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--navy-light);margin-bottom:0.75rem;">In Progress / Learning</div>
+        <div style="font-size:13px;color:var(--ink-mid);line-height:1.9;">Tableau · Power BI<br>R (ggplot2, dplyr)<br>Information governance · Clinical workflows</div>
+      </div>
+    </div>
+
+    <!-- Downloadable CSV -->
+    <div class="reveal">
+      <div class="artifact-card" style="border-top:4px solid var(--teal);">
+        <div class="art-header" style="background:var(--teal-light);">
+          <span class="art-title" style="color:var(--teal);">📥 Cluster Summary — Downloadable Data</span>
+          <span class="art-badge" style="background:var(--teal);color:var(--white);">CSV · Real Project Data</span>
+        </div>
+        <div class="art-body">
+          <p style="font-size:14px;color:var(--ink-mid);line-height:1.75;margin-bottom:1.25rem;">K-Means patient cluster profiles derived from 4,546 de-identified HW Dental records.</p>
+          <table class="metrics-table" style="margin-bottom:1.25rem;">
+            <thead><tr><th>Cluster</th><th>n</th><th>Avg Age</th><th>Insured %</th><th>Medicaid %</th><th>Email %</th><th>Has Referral %</th></tr></thead>
+            <tbody>
+              <tr><td>Insured &amp; Engaged</td><td class="val">1,795</td><td>34.4</td><td class="good">100%</td><td>0%</td><td class="good">80.1%</td><td>100%</td></tr>
+              <tr><td>Young Medicaid Families</td><td class="val">1,084</td><td>29.7</td><td class="good">100%</td><td class="warn">100%</td><td class="good">83.5%</td><td>87.8%</td></tr>
+              <tr><td>Uninsured Segment</td><td class="val">934</td><td>34.2</td><td class="warn">0%</td><td>0%</td><td>59.3%</td><td>61.0%</td></tr>
+              <tr><td>Low-Digital Medicaid</td><td class="val">733</td><td>33.7</td><td>76%</td><td class="warn">24%</td><td class="warn">39.4%</td><td>0%</td></tr>
+            </tbody>
+          </table>
+          <a id="csv-download-btn"
+             style="display:inline-flex;align-items:center;gap:0.5rem;background:var(--teal);color:var(--white);text-decoration:none;padding:0.6rem 1.4rem;font-size:13px;font-weight:600;border-radius:2px;letter-spacing:0.03em;transition:background 0.2s;"
+             onmouseover="this.style.background='#0a6b57'" onmouseout="this.style.background='var(--teal)'"
+             download="hw_dental_cluster_summary.csv">
+            ↓ Download cluster_summary.csv
+          </a>
+          <p style="font-size:11px;color:var(--ink-muted);margin-top:0.75rem;">De-identified aggregate data only · Franklin University BUSA-695 · 2025–2026</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── EXPERIENCE & CERTS ── -->
+<section id="experience">
+  <div class="section-inner">
+    <div class="section-header reveal">
+      <div class="section-num">08</div>
+      <div>
+        <div class="section-label">Experience &amp; certifications</div>
+        <h2 class="section-title">Work &amp; training</h2>
+      </div>
+    </div>
+    <div class="exp-cert-grid reveal">
+      <div>
+        <p style="font-size:11px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--teal);margin-bottom:1.5rem;">Work experience &amp; academic projects</p>
+        <div class="timeline">
+          <div class="tl-item">
+            <div class="tl-dot-col"><div class="tl-dot"></div><div class="tl-line"></div></div>
+            <div class="tl-content">
+              <div class="tl-title">Clinical Data Analyst Intern — GTechnologies Pty Ltd</div>
+              <div class="tl-sub">Aug 2025 – Dec 2025 &nbsp;·&nbsp; Remote &nbsp;·&nbsp; Healthcare AI</div>
+              <div class="tl-desc">Supported development of an AI-integrated EMR system for improved clinical decision support. Performed EDA on healthcare datasets, contributed to predictive modeling and feature engineering using Python, and built dashboards for communicating data insights to clinical stakeholders. Documented data workflows and compliance-aware data handling practices.</div>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot-col"><div class="tl-dot"></div><div class="tl-line"></div></div>
+            <div class="tl-content">
+              <div class="tl-title">Trainee — Indian Immunological Limited</div>
+              <div class="tl-sub">Sep 2023 – Dec 2023 &nbsp;·&nbsp; Pharmaceutical manufacturing</div>
+              <div class="tl-desc">Handled autoclave process operations, loading, unloading, and monitoring sterilization cycles. Performed quality checks and ensured safety protocols and equipment maintenance compliance in a regulated manufacturing environment.</div>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot-col"><div class="tl-dot"></div></div>
+            <div class="tl-content">
+              <div class="tl-title">Real-World Project — HW Dental Marketing Analytics</div>
+              <div class="tl-sub">2025–2026 &nbsp;·&nbsp; Franklin University / HW Dental</div>
+              <div class="tl-desc">Analyzed 4,546 de-identified patient records across four Columbus branches applying K-Means, Logistic Regression, Random Forest, and Time Series methods. Identified structural access barriers and developed a six-priority intervention roadmap with measurable KPIs.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <p style="font-size:11px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--teal);margin-bottom:1.5rem;">Certifications &amp; participation</p>
+        <div class="cert-list">
+          <div class="cert-item">
+            <div class="cert-title">Advanced Certification — Clinical Research &amp; Regulatory Affairs</div>
+            <div class="cert-meta">CliniWings Clinical Research Training Institute &nbsp;·&nbsp; Apr – Jun 2024 &nbsp;·&nbsp; 2 months</div>
+          </div>
+          <div class="cert-item">
+            <div class="cert-title">Covers: Clinical Research, CDM, Pharmacovigilance, Medical Writing, Regulatory Affairs</div>
+            <div class="cert-meta">Phases 0–4, ICH/GCP, CTD modules, ICSR processing, MedDRA, NDA/BLA dossiers</div>
+          </div>
+          <div class="cert-item">
+            <div class="cert-title">Participation — "Role of Steroids in COVID-19"</div>
+            <div class="cert-meta">TKR College of Pharmacy &amp; Royal Society of Chemistry &nbsp;·&nbsp; January 2022</div>
+          </div>
+          <div class="cert-item">
+            <div class="cert-title">Participation — "Role of Nutraceuticals"</div>
+            <div class="cert-meta">TKR College of Pharmacy &amp; Royal Society of Chemistry &nbsp;·&nbsp; March 2020</div>
+          </div>
+        </div>
+        <p style="font-size:11px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--teal);margin:2rem 0 1rem;">Target roles</p>
+        <div style="display:flex;flex-wrap:wrap;gap:0.6rem;">
+          <span class="chip chip-navy">Clinical Research Data Analyst</span>
+          <span class="chip chip-teal">Clinical Informatics</span>
+          <span class="chip chip-navy">Health Medical Data Analyst</span>
+          <span class="chip chip-teal">Health Informatics Analyst</span>
+          <span class="chip chip-amber">Healthcare IT Projects</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-name">Anand <span>Papagalla</span></div>
+  <div class="footer-links">
+    <a href="mailto:anand.nandu0211@gmail.com">Email</a>
+    <a href="tel:+13802849397">Phone</a>
+    <a href="https://www.linkedin.com/in/anand-nandu-8057b7307" target="_blank">LinkedIn</a>
+    <a href="https://anand11022000.github.io" target="_blank">GitHub</a>
+    <span style="color:rgba(174,214,241,0.35);font-size:12px;">Franklin University &nbsp;·&nbsp; Columbus, OH &nbsp;·&nbsp; BUSA-695 &nbsp;·&nbsp; 2025–2026</span>
+  </div>
+  <div style="width:100%;text-align:center;margin-top:1.25rem;padding-top:1.25rem;border-top:1px solid rgba(255,255,255,0.07);font-size:12px;color:rgba(174,214,241,0.5);">
+    Looking ahead: expanding into longitudinal EHR analytics, NLP-assisted clinical coding, and real-time health equity dashboards — bridging informatics with actionable population health strategy.
+  </div>
+</footer>
+
+<script>
+// Nav More dropdown
+const moreBtn = document.getElementById('nav-more-btn');
+const dropdown = document.getElementById('nav-dropdown');
+if (moreBtn && dropdown) {
+  moreBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const open = dropdown.classList.toggle('open');
+    moreBtn.setAttribute('aria-expanded', open);
+  });
+  document.addEventListener('click', () => {
+    dropdown.classList.remove('open');
+    moreBtn.setAttribute('aria-expanded', 'false');
+  });
+  dropdown.addEventListener('click', () => {
+    dropdown.classList.remove('open');
+    moreBtn.setAttribute('aria-expanded', 'false');
+  });
+}
+
+// Splash dismiss
+setTimeout(() => {
+  document.getElementById('splash').classList.add('fade-out');
+  setTimeout(() => document.getElementById('splash').remove(), 800);
+}, 3000);
+
+// Scroll reveal
+const revObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); revObs.unobserve(e.target); } });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => revObs.observe(el));
+
+// Animated bars — triggers when row enters view
+function animateBars(container) {
+  container.querySelectorAll('[data-w]').forEach(b => {
+    b.style.width = b.dataset.w;
+  });
+}
+const barObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      animateBars(e.target);
+      barObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.3 });
+['bc1','viz-row1','viz-row2','viz-row3','viz-row4','branch-chart','uninsured-chart','email-chart'].forEach(id => {
+  const el = document.getElementById(id);
+  if (el) barObs.observe(el);
+});
+
+// Generate CSV download link
+const csvData = `Cluster,n,Avg_Age,Avg_Family_Size,Insured_Pct,Medicaid_Pct,Email_Pct,Has_Referral_Pct
+Insured & Engaged,1795,34.4,1.9,100,0,80.1,100
+Young Medicaid Families,1084,29.7,2.2,100,100,83.5,87.8
+Uninsured Segment,934,34.2,1.5,0,0,59.3,61.0
+Low-Digital Medicaid,733,33.7,1.8,76,24,39.4,0`;
+const blob = new Blob([csvData], { type: 'text/csv' });
+const csvUrl = URL.createObjectURL(blob);
+const dlBtn = document.getElementById('csv-download-btn');
+if (dlBtn) dlBtn.href = csvUrl;
+
+// Smooth scroll
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    const t = document.querySelector(a.getAttribute('href'));
+    if (t) t.scrollIntoView({ behavior: 'smooth' });
+  });
+});
+</script>
+</body>
+</html>
